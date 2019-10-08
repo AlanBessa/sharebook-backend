@@ -210,6 +210,7 @@ namespace ShareBook.Service
             var book = _bookRepository.Get()
                                       .Include(d => d.User)
                                       .Include(f => f.UserFacilitator)
+                                      .Include(c => c.Category)
                                       .FirstOrDefault(id => id.Id == bookId);
             var winnerBookUser = _bookUserRepository
                                         .Get()
@@ -224,7 +225,7 @@ namespace ShareBook.Service
                 _muambatorService.AddPackageToTrackerAsync(winnerBookUser.User.Email, 
                                                            book.UserFacilitator == null ? string.Empty : book.UserFacilitator.Email, 
                                                            book.User == null ? string.Empty : book.User.Email, 
-                                                           trackingNumber);
+                                                           trackingNumber, book.Title, book.Category.Name);
 
             book.TrackingNumber = trackingNumber; 
             _bookService.Update(book);
